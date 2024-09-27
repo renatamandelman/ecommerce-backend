@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "title": "Producto 1",
+        "description": "Descripcion del producto 1",
+        "price": 150,
+        "thumbnail": "chaaau.png",
+        "code": "ABc125",
+        "stock": 11
+    },
+    {
+        "id": 2,
+        "title": "Producto 1",
+        "description": "Descripcion del producto 1",
+        "price": 150,
+        "thumbnail": "chaaau.png",
+        "code": "ABc155",
+        "stock": 11
+    }
+]
