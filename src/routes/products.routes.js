@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ProductManager } from "../manager/productManager.js";
 
+
 // Ejecutar nuestro router
 const router = Router();
 
@@ -47,4 +48,10 @@ router.delete("/:pid", async (req, res) => {
   res.status(200).json({ status: "ok", payload: deleteProduct });
 });
 
+// router.get("/realTimeProducts", async (req,res) => {
+//   const products = await productsManager.getProducts();
+//   req.io.emit("products",products);
+//   res.status(200).json({ status: "ok", payload: products });
+
+// });
 export default router;
