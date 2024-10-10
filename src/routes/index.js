@@ -12,7 +12,6 @@ router.use("/", viewsRouter);
 //middleWare a nivel router
 router.use(userRoleMiddleware);
 router.use("/products", productsRoutes);
-// router.get("/",(req,res) => {
-//     res.render("index");
-// });
+
+
 export default router;
