@@ -24,16 +24,27 @@
     <label for="stock">stock</label>
     <input id="stock" type="number" name="stock">
 </div>
+<div>
+    <label for="status">Status</label>
+    <input id="status" type="text" name="status">
+</div>
+<div>
+    <label for="category">category</label>
+    <input id="category" type="text" name="category">
+</div>
 <button id="guardarProduct">Guardar</button>
 </form>
 {{#each products}}
-<div>
+
+<div class="products">
     <p>Title:{{this.title}}</p>
     <p>Description: {{this.description}}</p>
     <p>Price: {{this.price}}</p>
     <p>Thumbnail: {{this.thumbnail}}</p>
     <p>Code: {{this.code}}</p>
     <p>Stock:{{this.stock}}</p>
+    <p>Status:{{this.status}}</p>
+    <p>Category:{{this.category}}</p>
 </div>
 {{/each}}
 

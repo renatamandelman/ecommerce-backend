@@ -1,3 +1,19 @@
 h1{
-    color:red;
+    color:black;
+    font-size: 2.5em;
+    text-align: center;
+    margin-top:1em;
+}
+.cardContenedor{
+    display: flex;
+    justify-content: center;
+}
+.products{
+    background-color: #7AB2B2;
+    border: 2px solid #CDE8E5;
+    border-radius: 0.5em;
+    width:fit-content;
+    padding: 1em;
+    margin:1em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }

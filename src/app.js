@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json()); // leer archivos archivos json
 app.use(express.urlencoded({extended: true})); 
 //habilitar archivos estaticos
-app.use(express.static("public"));
+app.use(express.static("./src/public"));
 
 //express-handlebars
 app.engine("handlebars", engine());
@@ -34,9 +34,19 @@ io.on("connection", async (socket) => {
     console.log("Nuevo cliente conectado");
     //emito los productos a realtime
     socket.emit("products", await manager.getProducts())
-    socket.on("newProduct", (product) => { 
-        manager.addProduct(product);
-     })
+    socket.on("newProduct", async (product) => { 
+    try{
+        console.log("Product data:", product); // Add this logging statement
+
+        if(!product) throw new Error ("no existe el producto")
+        
+        await manager.addProduct(product);
+        const products = await manager.getProducts();
+        socket.emit("products", products);
+    }catch(error){
+        console.log("Error al agregar el nuevo producto");
+    }
+    })
 });
 
 

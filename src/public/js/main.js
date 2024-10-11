@@ -7,18 +7,26 @@ socket.on("products", data => {
 const guardarProduct = document.getElementById("guardarProduct");
  
 guardarProduct.addEventListener("click", (event) => { 
+    event.preventDefault();
     const newProduct = {
-        name: document.getElementById("title").value,
+        title: document.getElementById("title").value,
         description: document.getElementById("description").value,
-        price: document.getElementById("price").value
+        price: document.getElementById("price").value,
+        thumbnail:document.getElementById("thumbnail").value,
+        code:document.getElementById("code").value,
+        stock:document.getElementById("stock").value,
+        status:document.getElementById("status").value,
+        category:document.getElementById("category").value
       };
-      if(newProduct.name.length === 0 || newProduct.description.length === 0 || newProduct.price.length === 0){
+      if(newProduct.title.length === 0 || newProduct.description.length === 0 || newProduct.price.length === 0){
         alert("debe completar los campos");
       } else{
-        io.emit("newProduct", {newProduct})
+        socket.emit("newProduct", newProduct);
+        console.log(newProduct)
       }
     
-  })
+  });
+
 //realTimeProducts
 
 
