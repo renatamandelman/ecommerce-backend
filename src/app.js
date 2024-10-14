@@ -37,15 +37,22 @@ io.on("connection", async (socket) => {
     socket.on("newProduct", async (product) => { 
     try{
         console.log("Product data:", product); // Add this logging statement
-
-        if(!product) throw new Error ("no existe el producto")
-        
         await manager.addProduct(product);
-        const products = await manager.getProducts();
-        socket.emit("products", products);
+        io.emit("products", await manager.getProducts());
+     
     }catch(error){
         console.log("Error al agregar el nuevo producto");
     }
+    })
+    socket.on("deleteProduct", async (productId) =>{
+        try{
+            console.log(productId)
+            await manager.deleteProduct(Number(productId));
+            io.emit("products", await manager.getProducts());
+            
+        }catch(error){
+            console.log("Error al eliminar el nuevo producto");
+        }
     })
 });
 

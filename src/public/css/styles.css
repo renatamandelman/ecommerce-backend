@@ -1,3 +1,4 @@
+
 h1{
     color:black;
     font-size: 2.5em;
@@ -7,13 +8,39 @@ h1{
 .cardContenedor{
     display: flex;
     justify-content: center;
+    width:80%;
+    flex-wrap: wrap;
+
 }
-.products{
+.product{
     background-color: #7AB2B2;
     border: 2px solid #CDE8E5;
     border-radius: 0.5em;
-    width:fit-content;
+    width:20%;
     padding: 1em;
     margin:1em;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+form div {
+    display: flex;
+    flex-wrap: wrap;
+    width: 20%;
+    margin:1em;
+}
+form{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+label{
+    font-size: 1.1em;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin-bottom: 0.8em;
+}
+input{
+    border: none;
+    border-bottom: 1px solid black;
+}
+input::placeholder{
+    opacity: 0.5;
 }

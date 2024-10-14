@@ -2,41 +2,37 @@
 <form>
     <div>
     <label for="title">Title</label>
-    <input type="text" id="title" name="title">
+    <input type="text" id="title" name="title" placeholder="Title...">
     </div>
     <div>
     <label for="description">Description</label>
-    <input id="description" type="text" name="description">
+    <input id="description" type="text" name="description" placeholder="Description...">
     </div>
     <div>
     <label for="price">Price</label>
-    <input id="price" type="number" name="price">
+    <input id="price" type="number" name="price" placeholder="Price">
 </div>
 <div>
-    <label for="thumbnail">thumbnail</label>
-    <input id="thumbnail" type="text" name="thumbnail">
+    <label for="thumbnail">Thumbnail</label>
+    <input id="thumbnail" type="text" name="thumbnail" placeholder="Thumbnail">
 </div>
 <div>
-    <label for="code">code</label>
-    <input id="code" type="number" name="code">
+    <label for="code">Code</label>
+    <input id="code" type="text" name="code" placeholder="Code">
 </div>
 <div>
-    <label for="stock">stock</label>
-    <input id="stock" type="number" name="stock">
+    <label for="stock">Stock</label>
+    <input id="stock" type="number" name="stock"  placeholder="Stock">
 </div>
 <div>
-    <label for="status">Status</label>
-    <input id="status" type="text" name="status">
+    <label for="category">Category</label>
+    <input id="category" type="text" name="category" placeholder="Category">
 </div>
-<div>
-    <label for="category">category</label>
-    <input id="category" type="text" name="category">
-</div>
-<button id="guardarProduct">Guardar</button>
+<button id="guardarProduct">Save</button>
 </form>
+<div class="cardContenedor">
 {{#each products}}
-
-<div class="products">
+<div class="product" id="product">
     <p>Title:{{this.title}}</p>
     <p>Description: {{this.description}}</p>
     <p>Price: {{this.price}}</p>
@@ -45,9 +41,10 @@
     <p>Stock:{{this.stock}}</p>
     <p>Status:{{this.status}}</p>
     <p>Category:{{this.category}}</p>
+    <button id={{this.id}}>Eliminar</button>
 </div>
 {{/each}}
-
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/main.js"></script>

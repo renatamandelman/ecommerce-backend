@@ -38,7 +38,7 @@ async getProductById(id) {
     try {
       await this.getProducts(); 
       
-      const { title, description, price, thumbnail, code, stock, status, category } = product;
+      const { title, description, price, thumbnail, code, stock, category } = product;
       const newProduct = {
         id: this.products.length + 1,
         title,
@@ -47,7 +47,7 @@ async getProductById(id) {
         thumbnail,
         code,
         stock,
-        status,
+        status:true,
         category,
       };
 
