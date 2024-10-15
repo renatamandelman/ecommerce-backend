@@ -1,3 +1,4 @@
+<div class="container">
 <h1>Productos:</h1>
 <form>
     <div>
@@ -30,7 +31,7 @@
 </div>
 <button id="guardarProduct">Save</button>
 </form>
-<div class="cardContenedor">
+<div class="cardContenedor" id="cardContenedor" data-id={{this.code}}>
 {{#each products}}
 <div class="product" id="product">
     <p>Title:{{this.title}}</p>
@@ -41,9 +42,10 @@
     <p>Stock:{{this.stock}}</p>
     <p>Status:{{this.status}}</p>
     <p>Category:{{this.category}}</p>
-    <button id={{this.id}}>Eliminar</button>
+    <button id={{this.code}}>Eliminar</button>
 </div>
 {{/each}}
+</div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -47,7 +47,7 @@ io.on("connection", async (socket) => {
     socket.on("deleteProduct", async (productId) =>{
         try{
             console.log(productId)
-            await manager.deleteProduct(Number(productId));
+            await manager.deleteProduct(productId);
             io.emit("products", await manager.getProducts());
             
         }catch(error){

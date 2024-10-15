@@ -21,7 +21,7 @@ async getProductById(id) {
   try{
     await this.getProducts(); 
 
-    const findProduct = this.products.find((product) => product.id === Number(id));
+    const findProduct = this.products.find((product) => product.id === (id));
 
     if (!findProduct) throw new Error("Product not found");
     console.log(findProduct);
@@ -40,7 +40,7 @@ async getProductById(id) {
       
       const { title, description, price, thumbnail, code, stock, category } = product;
       const newProduct = {
-        id: this.products.length + 1,
+        id: code,
         title,
         description,
         price,

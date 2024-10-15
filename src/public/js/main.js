@@ -2,6 +2,7 @@ const socket = io();
 console.log("Si funciona");
 
 const guardarProduct = document.getElementById("guardarProduct");
+const log = document.getElementById("cardContenedor");
 
 guardarProduct.addEventListener("click", (event) => {
   event.preventDefault();
@@ -15,34 +16,37 @@ guardarProduct.addEventListener("click", (event) => {
     category: document.getElementById("category").value,
   };
   socket.emit("newProduct", newProduct);
-  console.log(newProduct);
-
-  const log = document.getElementById("product");
-
-  log.innerHTML = `
-      
-    <p>Title:${newProduct.title}</p>
-    <p>Description: ${newProduct.description}</p>
-    <p>Price:${newProduct.price}</p>
-    <p>Thumbnail: {${newProduct.thumbnail}</p>
-    <p>Code: ${newProduct.code}</p>
-    <p>Stock:${newProduct.stock}</p>
-    <p>Status:${newProduct.status}</p>
-    <p>Category:${newProduct.category}</p>
-`;
 });
 
-const productButtons = document.querySelectorAll(".product button");
 
-productButtons.forEach((button) => {
-  button.addEventListener("click", (event) => {
-    event.preventDefault();
-    const productId = button.id;
-    console.log(`eliminar: ${productId}`)
-    socket.emit("deleteProduct", productId);
-  });
+
+
+socket.on("products", (products) => {
+ 
+    log.innerHTML = "";
+    products.forEach((product) => {
+      log.innerHTML += `
+        <div class="product" id="product">
+  <p>Title:${product.title}</p>
+  <p>Description: ${product.description}</p>
+  <p>Price: ${product.price}</p>
+  <p>Thumbnail: ${product.thumbnail}</p>
+  <p>Code: ${product.code}</p>
+  <p>Stock:${product.stock}</p>
+  <p>Status:${product.status}</p>
+  <p>Category:${product.category}</p>
+  <button id=${product.code}>Eliminar</button>
+</div>`;
+    });
+    const productButtons = document.querySelectorAll(".product button");
+
+    productButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const productId = button.id;
+        console.log(`eliminar: ${productId}`);
+        socket.emit("deleteProduct", productId);
+        
+      });
+    });
 });
-
-//realTimeProducts
-
-
