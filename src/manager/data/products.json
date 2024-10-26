@@ -1,1 +1,24 @@
-[]
+[
+    {
+        "id": "123h4",
+        "title": "producto 1",
+        "description": "iphone",
+        "price": "232",
+        "thumbnail": "ee.ong",
+        "code": "123h4",
+        "stock": "12",
+        "status": true,
+        "category": "a"
+    },
+    {
+        "id": "123hffe4",
+        "title": "producto 2",
+        "description": "iphone 16",
+        "price": "2332",
+        "thumbnail": "ee.ong",
+        "code": "123hffe4",
+        "stock": "12",
+        "status": true,
+        "category": "a"
+    }
+]
