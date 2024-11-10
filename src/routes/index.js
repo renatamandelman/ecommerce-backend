@@ -11,7 +11,7 @@ router.use("/", viewsRouter);
 
 //middleWare a nivel router
 router.use(userRoleMiddleware);
-router.use("/products", productsRoutes);
+router.use("/productsViews", productsRoutes);
 
 
 export default router;

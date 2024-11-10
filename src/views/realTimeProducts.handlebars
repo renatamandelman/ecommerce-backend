@@ -1,5 +1,5 @@
 <div class="container">
-<h1>Productos:</h1>
+<h2>Real Time Productos:</h2>
 <form>
     <div>
     <label for="title">Title</label>
@@ -29,6 +29,13 @@
     <label for="category">Category</label>
     <input id="category" type="text" name="category" placeholder="Category">
 </div>
+<div>
+    <label for="status">Status</label>
+    <select id="status">
+        <option value="true">Available</option>
+        <option value="false">Unavailable</option>
+    </select>
+</div>
 <button id="guardarProduct">Save</button>
 </form>
 <div class="cardContenedor" id="cardContenedor" data-id={{this.code}}>
@@ -37,16 +44,12 @@
     <p>Title:{{this.title}}</p>
     <p>Description: {{this.description}}</p>
     <p>Price: {{this.price}}</p>
-    <p>Thumbnail: {{this.thumbnail}}</p>
-    <p>Code: {{this.code}}</p>
-    <p>Stock:{{this.stock}}</p>
-    <p>Status:{{this.status}}</p>
-    <p>Category:{{this.category}}</p>
-    <button id={{this.code}}>Eliminar</button>
+    <button data-id="{{this._id}}">Eliminar</button>
 </div>
 {{/each}}
 </div>
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/main.js"></script>

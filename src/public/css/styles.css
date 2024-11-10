@@ -57,3 +57,66 @@ input::placeholder{
 .nodisp{
     display: none;
 }
+.singleProduct{
+    display: flex;
+    justify-content: space-evenly;
+    width:60%;
+    align-items: center;
+    background-color: #7AB2B2;
+    border-radius:1em ;
+    margin:1em;
+    padding:1em;
+}
+/* Estilo para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  thead {
+    background-color: #f4f4f4;
+  }
+  
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  td img {
+    max-width: 100px; /* Limita el tamaño de las imágenes */
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  /* Estilo de los precios y cantidades */
+  td p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  td h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+  
+  p {
+    color: #555;
+  }
+  

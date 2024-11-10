@@ -1,0 +1,25 @@
+<div id="cart">
+<h1>Cart {{cart._id}}</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Imagen</th>
+      <th>Producto</th>
+      <th>Precio</th>
+      <th>Cantidad</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each cart.products}}
+      <tr>
+        <td><img src="{{this.product.thumbnail}}" alt="Imagen del producto" width="100"></td>
+        <td>{{this.product.title}}</td>
+        <td>${{this.product.price}}</td>
+        <td>{{this.quantity}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+
+</div>
