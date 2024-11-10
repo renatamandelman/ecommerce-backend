@@ -93,10 +93,12 @@ const renderProductos = (productos) => {
 //   console.log("delete: " + productId);
 //   socket.emit("deleteProduct", productId);
 // }
+if(guardarProduct){
 guardarProduct.addEventListener("click", (event )=>{
   event.preventDefault();
   agregarProduct();
 })
+}
 
 
 const agregarProduct = () =>{
@@ -114,19 +116,18 @@ const agregarProduct = () =>{
   
 }
 
-  const buttonAddCart = document.getElementById("addProductCart");
-  // if (!buttonAddCart) {
-  //   console.log("No se encontró el botón");
-  // } else {
-    buttonAddCart.addEventListener("click", (event) => {
+const buttonsAddCart = document.getElementsByClassName("addProductCart");
+if (buttonsAddCart.length > 0) {
+  // Add event listener to each button
+  Array.from(buttonsAddCart).forEach(button => {
+    button.addEventListener("click", (event) => {
       event.preventDefault();
-      
-      // Verificar si el id del producto se obtiene correctamente
-      const pid = buttonAddCart.getAttribute("data-id");
-      console.log("Producto ID:", pid);  // Esto debería mostrar el ID si está bien
-      socket.emit("addProductCart", pid); // Emite el evento con el pid
-    });
-  
+      const pid = button.getAttribute("data-id");
+      console.log("Producto ID:", pid);
+      socket.emit("addProductCart", pid);
+        });
+  });
+}
   // const buttons = document.querySelectorAll("#addProductCart");
 
   // // Añadir el listener de evento a cada botón

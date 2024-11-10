@@ -6,13 +6,13 @@
     <p>Description: {{this.description}}</p>
     <p>Price: {{this.price}}</p>
      <p>Categoría: {{this.category}}</p>
-      <button >Agregar al carrito</button>
+  <button class="addProductCart" data-id={{this._id}}>Agregar al carrito</button>
 
 </div>
 {{/each}}
 </div>
 
-<div class="pagination">
+{{!-- <div class="pagination">
 {{#if hasPrevPage}}
     <a href="?page={{prevPage}}&limit={{../limit}}&sort={{../sort}}&query={{../query}}">Anterior</a>
 {{/if}}
@@ -22,7 +22,7 @@
 {{/if}}
 {{#if hasPrevPage}}
 	<a href="/products?page={prevPage}">Anterior</a>
-{{/if}}
+{{/if}} --}}
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
