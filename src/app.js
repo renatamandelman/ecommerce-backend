@@ -41,7 +41,7 @@ io.on("connection", async (socket) => {
     socket.on("newProduct", async (product) => { 
     try{
         console.log("Product data:", product); // Add this logging statement
-        await manager.addProduct(product);
+        await productManager.addProduct(product);
         io.sockets.emit("products", await productManager.getProducts());
      
     }catch(error){
