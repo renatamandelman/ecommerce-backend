@@ -28,26 +28,28 @@ router.post("/", async (req,res) => {
     res.status(200).json({status:"ok", payload:"carrito agregado" });
 });
 
-router.post("/:cid/product/:pid", async (req,res) => { 
+router.post("/:cid/product/:pid", async (req,res, next) => { 
   try{
     const { cid, pid } = req.params;
     await cartsManager.addProductToCart(cid,pid);
     res.status(200).json({status:"ok", payload:`producto agregado al carrito ${pid}`});
   }catch(error){
-    res.status(404).json({status:"error", payload:`No se agrego producto a carrito. ${error.message}`});
+    next(error);
+    // res.status(404).json({status:"error", payload:`No se agrego producto a carrito. ${error.message}`});
   }
  });
- router.put("/:cid", async (req,res) => {
+ router.put("/:cid", async (req,res,next) => {
     const {cid} = req.params;
     const {products} = req.body;
     try{
       const cart = await cartsManager.updateCart(cid,products);
       res.status(200).json({status:"ok", payload:cart});
     }catch(error){
-      res.status(404).json({status:"error", payload:`No se actualizo carrito: ${error.message}`});
+      next(error);
+      // res.status(404).json({status:"error", payload:`No se actualizo carrito: ${error.message}`});
     }
  })
- router.put("/:cid/product/:pid", async (req,res) => {   
+ router.put("/:cid/product/:pid", async (req,res,next) => {   
   const { cid, pid } = req.params;
   const {quantity} = req.body;
   if (typeof quantity !== 'number' || quantity < 0) {
@@ -57,26 +59,29 @@ router.post("/:cid/product/:pid", async (req,res) => {
     const cart = await cartsManager.updateProductQuantity(cid,pid,quantity);
   res.status(200).json({status:"ok", payload:cart});
   }catch(error){
-    res.status(400).json({ status: "error", message: error.message });
+    next(error);
+    // res.status(400).json({ status: "error", message: error.message });
   }
   });
-  router.delete("/:cid/products/:pid", async (req,res) => {
+  router.delete("/:cid/products/:pid", async (req,res,next) => {
     const { cid, pid } = req.params;
     try{
       const cart = await cartsManager.deleteProduct(cid,pid);
       res.status(200).json({status:"ok", payload:cart});
       }catch(error){
-        res.status(404).json({status:"error", payload:`No se elimino producto del
-          carrito: ${error.message}`});
+        next(error);
+        // res.status(404).json({status:"error", payload:`No se elimino producto del
+        //   carrito: ${error.message}`});
         }
     });
-    router.delete("/:cid", async(req,res) =>{
+    router.delete("/:cid", async(req,res,next) =>{
       const {cid} = req.params;
       try{
         await cartsManager.deleteCart(cid);
         res.status(200).json({status:"ok", payload:`carrito eliminado ${cid}`});
       }catch(error){
-        res.status(404).json({status:"error", payload:`No se elimino carrito ${cid}`});
+        next(error);
+        // res.status(404).json({status:"error", payload:`No se elimino carrito ${cid}`});
       }
     })
 

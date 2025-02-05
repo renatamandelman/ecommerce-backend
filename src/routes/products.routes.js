@@ -10,7 +10,7 @@ const productsManager = new ProductManager();
 
 //metodo get
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res,next) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const sort = req.query.sort || "";
@@ -53,13 +53,14 @@ router.get("/", async (req, res) => {
       } );
   
   }catch (error) {
+    next(error);
     console.error("Error al obtener los productos:", error);
     res.status(500).json({ status: 'error', message: 'Error al obtener los productos' });
 }
 });
 //get By Id
 
-router.get("/:pid", async (req, res) => {
+router.get("/:pid", async (req, res,next) => {
 try{
   const { pid } = req.params;
   const product = await productsManager.getProductById(pid);
@@ -69,12 +70,13 @@ try{
 
   res.status(200).json({ status: "ok", payload: product });
 }catch (error) {
+  next(error);
   console.error("Error al obtener los productos:", error);
   res.status(500).json({ status: 'error', message: `Error al obtener el producto ${pid}` });
 }
 });
 // metodo post
-router.post("/", async (req, res) => {
+router.post("/", async (req, res,next) => {
   try{
   const body = req.body;
 
@@ -84,11 +86,12 @@ router.post("/", async (req, res) => {
 
   res.status(201).json({ status: "ok", payload: products });
 }catch (error) {
+  next(error);
   console.error("Error al crear el producto", error);
   res.status(500).json({ status: 'error', message: 'Error al crear el producto' });
 }
 });
-router.put("/:pid", async (req, res) => {
+router.put("/:pid", async (req, res,next) => {
   try{
   const { pid } = req.params;
   const body = req.body;
@@ -97,17 +100,19 @@ router.put("/:pid", async (req, res) => {
 
   res.status(200).json({ status: "ok", payload: product });
   }catch (error) {
+    next(error);
     console.error("Error al actualizar el producto:", error);
     res.status(500).json({ status: 'error', message: 'Error al actualizar el producto' });
 }
 });
-router.delete("/:pid", async (req, res) => {
+router.delete("/:pid", async (req, res,next) => {
   try{
   const { pid } = req.params;
   const deleteProduct = await productsManager.deleteProduct(pid);
   if (!deleteProduct) return res.status(404).json({ status: "error", message: "Product not found" });
   res.status(200).json({ status: "ok", payload: deleteProduct });
   }catch (error) {
+    next(error);
     console.error("Error al eliminar el producto:", error);
     res.status(500).json({ status: 'error', message: 'Error al eliminar el producto' });
 }
