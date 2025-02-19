@@ -1,9 +1,9 @@
-import {decodeToken} from "../utils/token.util.js"
+import {decodeToken, decodeTokenFromHeaders} from "../utils/token.util.js"
 import User from "../models/user.model.js"
 
 const isAuth = async (req,res,next) => {
 try{
-const data = decodeToken(req.headers)
+const data = decodeTokenFromHeaders(req.headers)
 const {email} = data
 const user = await User.findOne(email);
 if(!user) {

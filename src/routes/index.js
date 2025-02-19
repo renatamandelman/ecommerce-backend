@@ -1,21 +1,24 @@
-import { Router } from "express";
+import CustomRouter from "../utils/CustomRouter.util.js";
 import productsRoutes from "./products.routes.js";
 import cartRoutes from "./carts.routes.js";
 import { userRoleMiddleware } from "../middlewares/userRoleMiddleware.js";
 import viewsRouter from "./views.routes.js";
 import usersRouter from "./user.routes.js";
 import authRouter from "./auth.routes.js";
-// import realTimeProducts from "../views/realTimeProducts.handlebars";
-const router = Router();
 
-router.use("/cart", cartRoutes);
-router.use("/", viewsRouter);
-router.use("/user", usersRouter);
-router.use("/auth", authRouter);
+class ApiRouter extends CustomRouter{
+    constructor(){
+        super();
+        this.init();
+        }
+        init = () =>{
+            this.use("/cart",["PUBLIC"], cartRoutes);
+            this.use("/", ["PUBLIC"],viewsRouter);
+            this.use("/user",["PUBLIC"], usersRouter);
+            this.use("/auth",["PUBLIC"], authRouter);
+            this.use("/productsViews",["PUBLIC"], productsRoutes);
 
-//middleWare a nivel router
-// router.use(userRoleMiddleware);
-router.use("/productsViews", productsRoutes);
-
-
-export default router;
+        }
+}
+const router = new ApiRouter();
+export default router.getRouter();

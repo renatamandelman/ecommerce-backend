@@ -1,85 +1,52 @@
-import { Router } from "express";
+import CustomRouter from "../utils/CustomRouter.util.js";
 import passportCb from "../middlewares/passportCallback.mid.js";
-const authRouter = Router();
-const login = async (req, res, next) => {
-  try {
-    const { token, user } = req;
-    return res
-      .status(200)
-      .cookie("token", token, opts)
-      .json({ message: "logged in", response: user });
-  } catch (error) {
-    next(error);
-  }
+
+const login = async (req, res) => {
+  const { token, user } = req;
+  const opts = { maxAge: 60 * 60 * 24 * 7 * 1000, hhtpOnly: true };
+  res.cookie("token", token, opts).json200(user, "logged in");
 };
-const signout = (req, res, next) => {
-  try {
-    return res.status(200).clearCookie("token").json({ message: "signed out" });
-  } catch (error) {
-    next(error);
-  }
+const signout = (req, res) => {
+  res.clearCookie("token").json200(null, "signed out");
 };
-const register = async (req, res, next) => {
-  try {
-    /*la callback done si todo esta bien, agrega al objeto 
+const register = async (req, res) => {
+  /*la callback done si todo esta bien, agrega al objeto 
     de requerimients los datos del usuario */
-    const user = req.user;
-    return res.status(201).json({ message: " registered", response: user });
-  } catch (error) {
-    next(error);
-  }
+  const user = req.user;
+  res.json201(user);
 };
-const online = async (req, res, next) => {
-  try {
-    const { user_id } = req.session;
-    if (!user_id) {
-      const error = new Error("its not online");
-      error.statusCode = 401;
-      throw error;
-    }
-    return res.status(201).json({ message: "its online" });
-  } catch (error) {
-    next(error);
+const online = async (req, res) => {
+  const { user_id } = req.session;
+  if (!user_id) {
+    const error = new Error("its not online");
+    error.statusCode = 401;
+    throw error;
   }
+  res.json201(null, "its online!");
 };
-const google = async (req, res, next) => {
-  try {
-    const { token, user } = req;
-    return res
-      .status(200)
-      .json({ message: "Logged in with Google", response: { token, user } });
-  } catch (error) {
-    next(error);
-  }
+const google = async (req, res) => {
+  const { token, user } = req;
+  const opts = { maxAge: 60 * 60 * 24 * 7 * 1000, hhtpOnly: true };
+  res.cookie("token", token, opts).json200(user, "logged in with Google");
 };
 const failure = (req, res) => {
-  return res.status(401).json({ message: "Google Error" });
+  return res.json401();
 };
+class AuthRouter extends CustomRouter {
+  constructor() {
+    super();
+    this.init();
+  }
+  init = () => {
+    this.create("/login", ["PUBLIC"], passportCb("login"), login);
+    this.create("/signout",["USER","ADMIN"], signout);
+    this.create("/register", ["PUBLIC"], passportCb("register"), register);
+    this.create("/online", ["USER","ADMIN"], online);
+    this.read("/google", ["PUBLIC"],passportCb("google"));
+    this.read("/google/callback",["PUBLIC"], passportCb("google"), google);
+    this.read("/google/failure",["PUBLIC"], failure);
+  };
+}
+const authRouter = new AuthRouter();
 
-authRouter.post(
-  "/login",
-  passportCb("login"),
-  login
-);
-authRouter.post(
-  "/signout",
-  passportCb("jwt-auth"),
-  signout
-);
-authRouter.post(
-  "/register",
-  passportCb("register"),
-  register
-);
-authRouter.post("/online",passportCb("jwt-auth"), online);
-authRouter.get(
-  "/google",
-  passportCb("google")
-);
-authRouter.get(
-  "/google/callback",
-  passportCb("google"),
-  google
-);
-authRouter.get("/google/failure", failure);
-export default authRouter;
+export default authRouter.getRouter();

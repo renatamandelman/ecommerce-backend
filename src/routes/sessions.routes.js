@@ -41,7 +41,7 @@ const current = (req,res,next) => {
 	try{
 		const user = req.user;
 		const token = req.token;
-		return res.status(200).cookie("current", token).json({ message: "logged in", response: user });
+		return res.status(200).cookie("jwt", token).json({ message: "logged in", response: user });
 	}catch(error){
 		next(error);
 	}

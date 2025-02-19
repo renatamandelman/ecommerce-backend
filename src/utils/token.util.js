@@ -25,15 +25,44 @@ const createToken = (data) => {
 // 	const decodeData = jwt.verify(token);
 // 	return decodeData;
 // }
-const decodeToken = (cookies) => {
-	const tokenInCookie = cookies.token;
-	if (!tokenInCookie) {
-	  const error = new Error("Token is required");
+// const decodeToken = (cookies) => {
+// 	const tokenInCookie = cookies.token;
+// 	if (!tokenInCookie) {
+// 	  const error = new Error("Token is required");
+// 	  error.statusCode = 401;
+// 	  throw error;
+// 	}
+// 	const decodeData = jwt.verify(tokenInCookie, process.env.JWT_KEY);
+// 	return decodeData;
+//   };
+const decodeTokenFromHeaders = (headers) => {
+	try {
+	  const authHeader = headers["authorization"];
+	  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+		const error = new Error("Token is required");
+		error.statusCode = 401;
+		throw error;
+	  }
+	  const token = authHeader.split(" ")[1];
+	  const decodeData = jwt.verify(token, process.env.JWT_KEY);
+	  return decodeData;
+	} catch (error) {
 	  error.statusCode = 401;
 	  throw error;
 	}
-	const decodeData = jwt.verify(tokenInCookie, process.env.JWT_KEY);
-	return decodeData;
   };
-export {createToken, decodeToken};
+  const decodeToken = (token) => {
+	  const decodeData = jwt.verify(token, process.env.JWT_KEY);
+	  return decodeData;
+	} 
+  const verifyToken = (token) => {
+	try {
+	  const decodeData = jwt.verify(token, process.env.JWT_KEY);
+	  return decodeData;
+	} catch (error) {
+	  error.statusCode = 401;
+	  throw error;
+	}
+  };
+export {createToken, decodeToken,decodeTokenFromHeaders};
 

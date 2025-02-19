@@ -1,18 +1,14 @@
-import { Router } from "express";
+import CustomRouter from "../utils/CustomRouter.util.js";
 import { ProductManager } from "../manager/productManager.js";
-import ProductModel from '../models/product.model.js';
+import ProductModel from "../models/product.model.js";
 // import { create } from "connect-mongo";
 import passportCb from "../middlewares/passportCallback.mid.js";
-
-
-// Ejecutar nuestro router
-const router = Router();
 
 const productsManager = new ProductManager();
 
 //metodo get
 
-router.get("/", async (req, res,next) => {
+const readAllProducts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const sort = req.query.sort || "";
@@ -21,105 +17,86 @@ router.get("/", async (req, res,next) => {
   if (query) {
     filter = {
       $or: [
-        { category: query },     // Filtrar por categoría
-        { availability: query }  // Filtrar por disponibilidad
-      ]
+        { category: query }, // Filtrar por categoría
+        { availability: query }, // Filtrar por disponibilidad
+      ],
     };
   }
-  try {
-    const productsListado = await ProductModel.paginate(filter,
-      {
-        page,
-        limit,
-        sort: sort ? { price: sort === "asc" ? 1 : -1 } : {},
-      }
-    );
-    console.log(productsListado); // Verifica los datos de paginación
+  const productsListado = await ProductModel.paginate(filter, {
+    page,
+    limit,
+    sort: sort ? { price: sort === "asc" ? 1 : -1 } : {},
+  });
+  console.log(productsListado); // Verifica los datos de paginación
 
-    const products = productsListado.docs.map((product) => {
-      const { _id, ...rest } = product.toObject();
-      return rest;
-     });
-     
-     
-     res.render("home",{
-         products,
-        totalPages: productsListado.totalPage,
-        prevPage: productsListado.prevPage,
-        nextPage: productsListado.nextPage,
-        page: productsListado.currentPage,
-        hasPrevPage: productsListado.hasPrevPage,
-        hasNextPage: productsListado.hasNextPage,
-        prevLink: productsListado.hasPrevPage ? productsListado.PrevLink : null,
-        nextLink: productsListado.hasNextPage ? productsListado.NextLink : null,
-      } );
-  
-  }catch (error) {
-    next(error);
-    console.error("Error al obtener los productos:", error);
-    res.status(500).json({ status: 'error', message: 'Error al obtener los productos' });
-}
-});
+  const products = productsListado.docs.map((product) => {
+    const { _id, ...rest } = product.toObject();
+    return rest;
+  });
+
+  res.render("home", {
+    products,
+    totalPages: productsListado.totalPage,
+    prevPage: productsListado.prevPage,
+    nextPage: productsListado.nextPage,
+    page: productsListado.currentPage,
+    hasPrevPage: productsListado.hasPrevPage,
+    hasNextPage: productsListado.hasNextPage,
+    prevLink: productsListado.hasPrevPage ? productsListado.PrevLink : null,
+    nextLink: productsListado.hasNextPage ? productsListado.NextLink : null,
+  });
+};
 //get By Id
 
-router.get("/:pid", async (req, res,next) => {
-try{
+const readProduct = async (req, res) => {
   const { pid } = req.params;
   const product = await productsManager.getProductById(pid);
 
   if (!product)
-    return res.status(404).json({ status: "error", message: "Product not found" });
-
-  res.status(200).json({ status: "ok", payload: product });
-}catch (error) {
-  next(error);
-  console.error("Error al obtener los productos:", error);
-  res.status(500).json({ status: 'error', message: `Error al obtener el producto ${pid}` });
-}
-});
+    return res.json404("Product not found" );
+    
+  res.json200(product);
+};
 // metodo post
-const createProduct = async (req, res,next) => {
-  try{
+const createProduct = async (req, res) => {
   const body = req.body;
 
   const products = await productsManager.addProduct(body);
   if (!products)
-    return res.status(404).json({ status: "error", message: "error" });
+    return res.json404("product Not Found");
 
-  res.status(201).json({ status: "ok", payload: products });
-}catch (error) {
-  next(error);
-  console.error("Error al crear el producto", error);
-  res.status(500).json({ status: 'error', message: 'Error al crear el producto' });
-}
+  res.json201(products);
 };
-router.put("/:pid", async (req, res,next) => {
-  try{
+const updateProduct = async (req, res) => {
   const { pid } = req.params;
   const body = req.body;
 
   const product = await productsManager.updateProduct(pid, body);
 
-  res.status(200).json({ status: "ok", payload: product });
-  }catch (error) {
-    next(error);
-    console.error("Error al actualizar el producto:", error);
-    res.status(500).json({ status: 'error', message: 'Error al actualizar el producto' });
-}
-});
-const deleteOneProduct = async (req, res,next) => {
-  try{
+  res.json200(product, "updated product" );
+};
+const deleteOneProduct = async (req, res) => {
   const { pid } = req.params;
   const deleteProduct = await productsManager.deleteProduct(pid);
-  if (!deleteProduct) return res.status(404).json({ status: "error", message: "Product not found" });
-  res.status(200).json({ status: "ok", payload: deleteProduct });
-  }catch (error) {
-    next(error);
-    console.error("Error al eliminar el producto:", error);
-    res.status(500).json({ status: 'error', message: 'Error al eliminar el producto' });
-}
+  if (!deleteProduct)
+    return res
+      .json404
+     ( "Product not found");
+  res.json200(deleteProduct, "deleted product");
 };
 
-router.post("/",passportCb("jwt-adm"), createProduct);
-router.delete("/pid", passportCb("jwt-adm"), deleteOneProduct)
-export default router;
+class ProductsRouter extends CustomRouter {
+  constructor() {
+    super();
+    this.init();
+  }
+  init = () => {
+    this.create("/",["ADMIN"], createProduct);
+    this.read("/",["PUBLIC"], readAllProducts);
+    this.read("/:pid", ["PUBLIC"],readProduct);
+    this.update("/:pid", ["ADMIN"],updateProduct);
+    this.destroy("/pid",["ADMIN"], deleteOneProduct);
+  };
+}
+const productsRouter = new ProductsRouter();
+export default productsRouter.getRouter();
