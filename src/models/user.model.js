@@ -3,12 +3,11 @@ import { Schema, model } from "mongoose";
 const collection = "users";
 const schema = new Schema(
   {
-    name: { type: String },
+    avatar: {type:String, default: "user.png"},
     email: { type: String, required: true, index: true, unique: true },
+    age: { type: Number },
     password: { type: String, required: true },
     role: { type: String, default: "USER", enum: ["USER", "ADMIN"] },
-    avatar: { type: String, default: "https://cdn-icons-png.flaticon.com/512/6596/6596121.png",
-    },
   },
   { timestamps: true }
 );

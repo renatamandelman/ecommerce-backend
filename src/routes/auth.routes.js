@@ -1,18 +1,20 @@
 import { Router } from "express";
-import passport from "../middlewares/passport.mid.js";
+import passportCb from "../middlewares/passportCallback.mid.js";
 const authRouter = Router();
 const login = async (req, res, next) => {
   try {
-    const user = req.user;
-    return res.status(200).json({ message: "logged in" });
+    const { token, user } = req;
+    return res
+      .status(200)
+      .cookie("token", token, opts)
+      .json({ message: "logged in", response: user });
   } catch (error) {
     next(error);
   }
 };
 const signout = (req, res, next) => {
   try {
-    req.session.destroy();
-    return res.status(200).json({ message: "logged in" });
+    return res.status(200).clearCookie("token").json({ message: "signed out" });
   } catch (error) {
     next(error);
   }
@@ -56,29 +58,27 @@ const failure = (req, res) => {
 
 authRouter.post(
   "/login",
-  passport.authenticate("login", { session: false }),
+  passportCb("login"),
   login
 );
-authRouter.post("/signout", signout);
+authRouter.post(
+  "/signout",
+  passportCb("jwt-auth"),
+  signout
+);
 authRouter.post(
   "/register",
-  passport.authenticate("register", { session: false }),
+  passportCb("register"),
   register
 );
-authRouter.post("/online", online);
+authRouter.post("/online",passportCb("jwt-auth"), online);
 authRouter.get(
   "/google",
-  passport.authenticate("google", {
-    scope: ["email", "profile"],
-    failureRedirect: "/google/failure",
-  })
+  passportCb("google")
 );
 authRouter.get(
   "/google/callback",
-  passport.authenticate("google", {
-    session: false,
-    failureRedirect: "/google/failure",
-  }),
+  passportCb("google"),
   google
 );
 authRouter.get("/google/failure", failure);

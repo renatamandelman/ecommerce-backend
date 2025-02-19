@@ -1,4 +1,5 @@
 import { Router } from "express";
+import passport from "../middlewares/passport.mid.js";
 const sessionsRouter = Router();
 
 sessionsRouter.post("/", (req,res,next) => {
@@ -35,4 +36,19 @@ sessionsRouter.delete("/", (req,res,next) => {
         next(error);
     }
 
-})
+});
+const current = (req,res,next) => { 
+	try{
+		const user = req.user;
+		const token = req.token;
+		return res.status(200).cookie("current", token).json({ message: "logged in", response: user });
+	}catch(error){
+		next(error);
+	}
+ }
+
+ authRouter.post(
+   "/current",
+   passport.authenticate("login", { session: false }),
+   current
+ );

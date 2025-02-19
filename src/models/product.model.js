@@ -9,19 +9,19 @@ const productSchema = new mongoose.Schema({
         type:String, required:true
     },
     price: {
-        type:Number, required:true
+        type:Number, required:true, default:1
     },
     img: {
-        type:String
+         type:String, default: "iphone15.png"
     },
     code: {
         type:String, required:true, unique:true
     },
     stock: {
-        type:Number, required:true
+        type:Number, required:true, default:1
     },
     category: {
-        type:String, required:true
+        type:String, required:true, default:"electronics"
     },
     status: {
         type:Boolean, required:true

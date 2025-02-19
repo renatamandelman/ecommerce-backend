@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { ProductManager } from "../manager/productManager.js";
 import ProductModel from '../models/product.model.js';
+// import { create } from "connect-mongo";
+import passportCb from "../middlewares/passportCallback.mid.js";
 
 
 // Ejecutar nuestro router
@@ -76,7 +78,7 @@ try{
 }
 });
 // metodo post
-router.post("/", async (req, res,next) => {
+const createProduct = async (req, res,next) => {
   try{
   const body = req.body;
 
@@ -90,7 +92,7 @@ router.post("/", async (req, res,next) => {
   console.error("Error al crear el producto", error);
   res.status(500).json({ status: 'error', message: 'Error al crear el producto' });
 }
-});
+};
 router.put("/:pid", async (req, res,next) => {
   try{
   const { pid } = req.params;
@@ -105,7 +107,7 @@ router.put("/:pid", async (req, res,next) => {
     res.status(500).json({ status: 'error', message: 'Error al actualizar el producto' });
 }
 });
-router.delete("/:pid", async (req, res,next) => {
+const deleteOneProduct = async (req, res,next) => {
   try{
   const { pid } = req.params;
   const deleteProduct = await productsManager.deleteProduct(pid);
@@ -116,12 +118,8 @@ router.delete("/:pid", async (req, res,next) => {
     console.error("Error al eliminar el producto:", error);
     res.status(500).json({ status: 'error', message: 'Error al eliminar el producto' });
 }
-});
+};
 
-// router.get("/realTimeProducts", async (req,res) => {
-//   const products = await productsManager.getProducts();
-//   req.io.emit("products",products);
-//   res.status(200).json({ status: "ok", payload: products });
-
-// });
+router.post("/",passportCb("jwt-adm"), createProduct);
+router.delete("/pid", passportCb("jwt-adm"), deleteOneProduct)
 export default router;
