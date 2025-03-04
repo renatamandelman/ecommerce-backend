@@ -1,4 +1,4 @@
-import "dotenv/config.js";
+import "./utils/env.util.js";
 import express from "express";
 import cookieParser from "cookie-parser";
 import session from "express-session";
@@ -10,9 +10,9 @@ import {engine} from "express-handlebars";
 import {Server} from "socket.io";
 import dbConnect from "./utils/dbConnect.util.js";
 import ProductModel from "./models/product.model.js";
-
+import argsUtil from "./utils/args.util.js";
 const app = express();
-const port = 8080;
+const port = argsUtil.p;
 const ready = async () => {
   console.log("server is ready on port " + port);
   await dbConnect();
