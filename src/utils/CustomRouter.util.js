@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { decodeToken } from "./token.util.js";
-
+import applyPolicies from "./applyPolicies.mid.js";
 class CustomRouter {
   constructor() {
     this.router = Router();
-    this.setupResponses();
-    this.policies();
+    this.use(this.setupResponses);
+  
   }
   getRouter = () => this.router;
   applyMidds = (middlewares) =>
@@ -46,49 +46,18 @@ class CustomRouter {
       next();
     });
   };
-  policies = (policies) => async (req, res, next) => {
-    try {
-      if (policies.includes("PUBLIC")) return next();
-
-      const token = req?.cookies?.token;
-
-      if (!token) return res.json401();
-
-      const data = decodeToken(token);
-
-      const { role, user_id } = data;
-
-      if (!role || !user_id) return res.json401();
-
-      if (
-        (policies.includes("USER") && role === "USER") ||
-        (policies.includes("ADMIN") && role === "ADMIN")
-      ) {
-        const user = await readById(user_id);
-
-        if (!user) return res.json401();
-
-        req.user = user;
-
-        return next();
-      }
-
-      return res.json403();
-    } catch (error) {
-      return res.json400(error.message);
-    }
-  };
+  
   /* metodo encargado de crear una solicitud de tipo post, usando la palabra de la variable path y todos los middleware que me envien luego */
   create = (path,policies, ...middlewares) =>
-    this.router.post(path, this.policies(policies), this.applyMidds(middlewares));
+    this.router.post(path, applyPolicies(policies), this.applyMidds(middlewares));
   read = (path,policies, ...middlewares) =>
-    this.router.get(path,this.policies(policies), this.applyMidds(middlewares));
+    this.router.get(path,applyPolicies(policies), this.applyMidds(middlewares));
   update = (path,policies, ...middlewares) =>
-    this.router.put(path,this.policies(policies), this.applyMidds(middlewares));
+    this.router.put(path,applyPolicies(policies), this.applyMidds(middlewares));
   destroy = (path,policies, ...middlewares) =>
-    this.router.delete(path,this.policies(policies), this.applyMidds(middlewares));
+    this.router.delete(path,applyPolicies(policies), this.applyMidds(middlewares));
   use = (path,policies, ...middlewares) =>
-    this.router.use(path,this.policies(policies), this.applyMidds(middlewares));
+    this.router.use(path,applyPolicies(policies), this.applyMidds(middlewares));
 }
 
 export default CustomRouter;

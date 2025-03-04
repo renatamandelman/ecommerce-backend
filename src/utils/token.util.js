@@ -64,5 +64,5 @@ const decodeTokenFromHeaders = (headers) => {
 	  throw error;
 	}
   };
-export {createToken, decodeToken,decodeTokenFromHeaders};
+export {createToken, decodeToken,decodeTokenFromHeaders, verifyToken};
 

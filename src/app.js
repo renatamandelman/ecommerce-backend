@@ -24,14 +24,14 @@ const ready = async () => {
 app.use(express.json()); // leer archivos archivos json
 app.use(express.urlencoded({extended: true})); 
 
-app.use(cookieParser (process.env.COOKIE_KEY));
-app.use(
-session ({
-secret: process.env.SESSION_KEY, resave: true, saveUninitialized: true,
-cookie: { maxAge: 60 * 1000 * 60 * 24 * 7},
-store: new MongoStore({ mongoUrl: process.env.LINK_MONGO, ttl: 60 * 60 * 24 *7})
-})
-);
+// app.use(cookieParser (process.env.COOKIE_KEY));
+// app.use(
+// session ({
+// secret: process.env.SESSION_KEY, resave: true, saveUninitialized: true,
+// cookie: { maxAge: 60 * 1000 * 60 * 24 * 7},
+// store: new MongoStore({ mongoUrl: process.env.LINK_MONGO, ttl: 60 * 60 * 24 *7})
+// })
+// );
 //habilitar archivos estaticos
 app.use(express.static("./src/public"));
 
@@ -45,7 +45,7 @@ app.use((req,res, next) => {
     console.log("se ejecuta el middleware a nivel app");
     next();
 })
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(cookieParser(process.env.COOKIE_KEY));
 app.use(
     session({

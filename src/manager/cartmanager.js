@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import __dirname from "/Users/valeremandel/Desktop/coderHouse/ecommerce-Mandelman/dirname.js";
+// import __dirname from "/Users/valeremandel/Desktop/coderHouse/ecommerce-Mandelman/dirname.js";
 import ProductModel from "../models/product.model.js";
 import CartModel from "../models/cart.model.js";
 import { ProductManager } from "./productManager.js";
