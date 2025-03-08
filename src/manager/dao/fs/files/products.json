@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "85fb2e2792311ca74b294ec8",
+    "title": "iPad 1.1",
+    "description": "The iPad is a versatile and powerful tablet. It’s perfect for watching movies, reading, and working on the go.",
+    "category": "Tablets",
+    "image": "https://images.unsplash.com/photo-1561948955-0fae37f1a179",
+    "price": 505,
+    "stock": 12,
+    "onsale": false,
+    "owner_id": "fc4aefb7781302a21fa5f3fb",
+    "createdAt": "2025-02-26T22:31:34.662Z",
+    "updatedAt": "2025-02-26T22:31:34.662Z"
+  }
+]

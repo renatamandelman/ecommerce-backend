@@ -1,8 +1,16 @@
-import User from "../models/user.model.js";
+import { usersManager } from "../manager/dao/dao.js";
 import { verifyToken } from "../utils/token.util.js";
 
 const applyPolicies = (policies) => async (req, res, next) => {
   try {
+    // console.log("Policies received:", policies);
+    
+    // if (!Array.isArray(policies)) {
+    //   console.error("🚨 Policies is not an array:", policies);
+    //   return res.json500("Server error: Invalid policies format");
+    // }
+    console.log(policies)
+    console.log(policies.includes())
     if (policies.includes("PUBLIC")) return next();
 
     const token = req?.cookies?.token;
@@ -19,7 +27,7 @@ const applyPolicies = (policies) => async (req, res, next) => {
       ADMIN: policies.includes("ADMIN"),
     };
     if (allowedRolles[role]) {
-      const user = await readById(user_id);
+      const user = await usersManager.readById(user_id);
       if (!user) return res.json401();
       req.user = user;
       return next();

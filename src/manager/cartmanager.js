@@ -3,13 +3,10 @@ import path from "path";
 // import __dirname from "/Users/valeremandel/Desktop/coderHouse/ecommerce-Mandelman/dirname.js";
 import ProductModel from "../models/product.model.js";
 import CartModel from "../models/cart.model.js";
-import { ProductManager } from "./productManager.js";
 
-const productsManager = new ProductManager();
 export class CartManager {
   constructor() {
     this.carts = [];
-    // this.pathFile = __dirname + "/src/manager/data/cart.json";
   }
   async getCarts() {
     try {

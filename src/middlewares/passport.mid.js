@@ -5,6 +5,8 @@ import {Strategy as JwtStrategy, ExtractJwt} from "passport-jwt";
 import User from "../models/user.model.js";
 import { createHash, compareHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
+import { usersManager } from "../manager/dao/dao.js";
+import UserDto from "../manager/dto/users.dto.js";
 
 passport.use(
   "register",
@@ -15,13 +17,13 @@ passport.use(
     async (req, email, password, done) => {
       //la logica de la estrategia
       try {
-        const one = await User.findOne({ email });
+        const one = await usersManager.readBy({ email });
         if (one) {
           return done(null, null, {message: "invalid credential", statusCode:401}); 
         }
         //antes de crear el usuario debo proteger la contrasena
-        req.body.password = createHash(password);
-        const user = await User.create(req.body);
+        // req.body.password = createHash(password);
+        const user = await usersManager.create(new UserDto(req.body));
         done(null, user);
       } catch (error) {
         done(error);
@@ -35,7 +37,7 @@ passport.use(
     { passReqToCallback: true, usernameField: "email" },
     async (req, email, password, done) => {
       try {
-        const user = await User.findOne({ email });
+        const user = await usersManager.readBy({ email });
         if (!user) {
           return done(null, null, {message: "invalid credential", statusCode:401}); 
         }
@@ -71,7 +73,7 @@ passport.use(
     /* callback done con la logica necesaria para la estrategia */
     async (req, accesToken, refreshToken, profile, done) => {
       try {
-        let user = await User.findOne({ email: profile.id });
+        let user = await usersManager.findOne({ email: profile.id });
         if (!user) {
           user = {
             email: profile.id,

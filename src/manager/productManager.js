@@ -3,7 +3,6 @@ import ProductModel from "../models/product.model.js";
 export class ProductManager {
   constructor() {
     this.products = [];
-    // this.pathFile = __dirname +  "/src/manager/data/products.json";
   }
 async getProducts() {
   try{
