@@ -1,6 +1,6 @@
-import User from "../../../models/user.model.js";
-import ProductModel from "../../../models/product.model.js";
-import CartModel from "../../../models/cart.model.js";
+import User from "./models/user.model.js";
+import ProductModel from "./models/product.model.js";
+import CartModel from "./models/cart.model.js";
 class MongoManager {
     constructor(model) { this.model = model }
     create = async (data) => await this.model.create(data);

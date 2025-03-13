@@ -14,6 +14,9 @@ class UserDto {
     this.password = createHash(data.password);
     this.avatar = data.avatar || "avatar.png";
     this.role = data.role || "USER";
+    this.verifyCode = data.verifyCode;;
+    this.verify = data.verify || false;
+
     if (pers !== "mongo") {
       this.createAt = new Date();
       this.updateAt = new Date();

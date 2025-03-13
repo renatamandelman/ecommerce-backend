@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 // import __dirname from "/Users/valeremandel/Desktop/coderHouse/ecommerce-Mandelman/dirname.js";
-import ProductModel from "../models/product.model.js";
-import CartModel from "../models/cart.model.js";
+import ProductModel from "./dao/mongo/models/product.model.js";
+import CartModel from "./dao/mongo/models/cart.model.js";
 
 export class CartManager {
   constructor() {

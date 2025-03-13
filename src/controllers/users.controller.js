@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import User from "../manager/dao/mongo/models/user.model.js";
 import usersService from "../services/user.service.js";
 const createUser = async (req, res, next) => {
     try {

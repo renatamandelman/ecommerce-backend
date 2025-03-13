@@ -1,5 +1,5 @@
 import productsService from "../services/product.service.js";
-import ProductModel from "../models/product.model.js";
+import ProductModel from "../manager/dao/mongo/models/product.model.js";
 const readAllProducts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;

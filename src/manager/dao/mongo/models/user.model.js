@@ -8,6 +8,8 @@ const schema = new Schema(
     age: { type: Number },
     password: { type: String, required: true },
     role: { type: String, default: "USER", enum: ["USER", "ADMIN"] },
+    verifyCode: {type:String,requiered:true},
+    verify: {type:Boolean, default:false}
   },
   { timestamps: true }
 );

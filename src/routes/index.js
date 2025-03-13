@@ -14,8 +14,8 @@ class ApiRouter extends CustomRouter{
         }
         init = () =>{
             this.use("/cart",["PUBLIC"], cartRoutes);
-            this.use("/", ["PUBLIC"],viewsRouter);
-            this.use("/user",["PUBLIC"], usersRouter);
+            this.use("/views", ["PUBLIC"],viewsRouter);
+            this.use("/users",["PUBLIC"], usersRouter);
             this.use("/auth",["PUBLIC"], authRouter);
             this.use("/productsV",["PUBLIC"], productsRoutes);
             this.use("/process",["PUBLIC"],processRouter);

@@ -2,12 +2,12 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import {Strategy as JwtStrategy, ExtractJwt} from "passport-jwt";
-import User from "../models/user.model.js";
+import User from "../manager/dao/mongo/models/user.model.js";
 import { createHash, compareHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
 import { usersManager } from "../manager/dao/dao.js";
 import UserDto from "../manager/dto/users.dto.js";
-
+import crypto from "crypto";
 passport.use(
   "register",
   new LocalStrategy(
@@ -21,9 +21,10 @@ passport.use(
         if (one) {
           return done(null, null, {message: "invalid credential", statusCode:401}); 
         }
-        //antes de crear el usuario debo proteger la contrasena
-        // req.body.password = createHash(password);
+        const verifyCode = crypto.randomBytes(12).toString("hex");
+        req.body.verifyCode = verifyCode;
         const user = await usersManager.create(new UserDto(req.body));
+        await verifyAccount({to:email,verifyCode})
         done(null, user);
       } catch (error) {
         done(error);
@@ -39,7 +40,11 @@ passport.use(
       try {
         const user = await usersManager.readBy({ email });
         if (!user) {
-          return done(null, null, {message: "invalid credential", statusCode:401}); 
+          return done(null, null, {message: "invalid credentials", statusCode:401}); 
+        }
+        const verifyUser = user.verify;
+        if(!verifyUser){
+          return done(null, null, {message: "invalid credentials", statusCode:401}); 
         }
         const verifyPassword = compareHash(password, user.password);
         if (!verifyPassword) {
