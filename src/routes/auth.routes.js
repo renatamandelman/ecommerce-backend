@@ -17,7 +17,6 @@ class AuthRouter extends CustomRouter {
     this.read("/google/failure",["PUBLIC"], failure);
     this.read("/nodemailer/:email",["PUBLIC"], nodemailer);
     this.create("/verify",["PUBLIC"], verify)
-    this.create("/verify",["PUBLIC"], verify);
     this.read("/forgotPassword/:email", ["PUBLIC"], forgotPassword); // Ruta para enviar el correo de restauración
   this.create("/resetPassword", ["PUBLIC"], resetPassword); 
 

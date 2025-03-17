@@ -11,9 +11,10 @@ async function verifyAccount(to, verifyCode) {
       secure: true,
       auth: { user, pass },
     });
+    console.log("a:" +JSON.stringify(to))
     await transport.sendMail({
       from: `CODER COMMERCE <${user}>`,
-      to,
+      to: to,
       subject: "Verify your coder commerce account",
       html: `YOUR VERIFY TOKEN IS:${verifyCode}`,
     });

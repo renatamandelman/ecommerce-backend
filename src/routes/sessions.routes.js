@@ -41,11 +41,18 @@ const current = (req,res,next) => {
 	try{
 		const user = req.user;
 		const token = req.token;
-		return res.status(200).cookie("jwt", token).json({ message: "logged in", response: user });
+		if (!user) {
+			return res.status(401).json({ message: "Unauthorized" });
+		  }
+	  
+		  const currentUser = new UserSafeDTO(user);
+	  
+		  return res.status(200).cookie("jwt", token).json({ message: "logged in", response: currentUser });
 	}catch(error){
 		next(error);
 	}
  }
+ 
 
  authRouter.post(
    "/current",

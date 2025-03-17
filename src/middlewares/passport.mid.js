@@ -8,6 +8,7 @@ import { createToken } from "../utils/token.util.js";
 import { usersManager } from "../manager/dao/dao.js";
 import UserDto from "../manager/dto/users.dto.js";
 import crypto from "crypto";
+import verifyAccount from "../utils/nodemailer.util.js";
 passport.use(
   "register",
   new LocalStrategy(
@@ -24,7 +25,7 @@ passport.use(
         const verifyCode = crypto.randomBytes(12).toString("hex");
         req.body.verifyCode = verifyCode;
         const user = await usersManager.create(new UserDto(req.body));
-        await verifyAccount({to:email,verifyCode})
+        await verifyAccount(email,verifyCode)
         done(null, user);
       } catch (error) {
         done(error);
@@ -39,18 +40,20 @@ passport.use(
     async (req, email, password, done) => {
       try {
         const user = await usersManager.readBy({ email });
+        console.log(
+          "user", 
+          user
+        )
         if (!user) {
-          return done(null, null, {message: "invalid credentials", statusCode:401}); 
+          return done(null, null, {message: "no user invalid credentials", statusCode:401}); 
         }
         const verifyUser = user.verify;
         if(!verifyUser){
-          return done(null, null, {message: "invalid credentials", statusCode:401}); 
+          return done(null, null, {message: "verify invalid credentials", statusCode:401}); 
         }
         const verifyPassword = compareHash(password, user.password);
         if (!verifyPassword) {
-          const error = new Error("invalid credetials");
-          error.statusCode = 401;
-          throw error;
+          return done(null, null, { message: "Invalid credentials", statusCode: 401 });
         }
         const token = createToken({
           email: user.email,

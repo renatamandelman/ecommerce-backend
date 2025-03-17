@@ -1,4 +1,5 @@
 document.querySelector("#register").addEventListener("click", async () => {
+  console.log("Botón de registro presionado"); 
     try {
       const data = {
         name: document.querySelector("#name").value,
