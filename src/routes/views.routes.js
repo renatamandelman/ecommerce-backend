@@ -5,6 +5,7 @@ import { ProductManager } from "../manager/productManager.js";
 const productManager = new ProductManager();
 import { CartManager } from "../manager/cartmanager.js";
 import { productsManager, usersManager } from "../manager/dao/dao.js";
+import { cartsManager } from "../manager/dao/memory/manager.memory.js";
 const cartManager = new CartManager();
 
 // router.get("/products", async (req,res,next) =>{
@@ -52,7 +53,7 @@ const cartManager = new CartManager();
 viewsRouter.get("/", async (req, res) => {
   try {
     const products = await productsManager.read();
-    return res.status(200).render("index", { products, title: "HOME" });
+    return res.status(200).render("home", { products, title: "HOME" });
   } catch (error) {
     console.log(error);
     return res.status(500).render("error");
@@ -102,6 +103,14 @@ viewsRouter.get("/cart/:user_id", async (req, res) => {
     const carts = await cartsManager.readProductsFromUser(user_id);
     const total = await cartsManager.totalToPay(user_id);
     return res.status(200).render("cart", { title: "CART", carts, total: total[0].total });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).render("error");
+  }
+});
+viewsRouter.get("/verify", (req, res) => {
+  try{
+  res.render("verify");
   } catch (error) {
     console.log(error);
     return res.status(500).render("error");

@@ -29,7 +29,8 @@ app.use(morgan("dev"));
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser(process.env.COOKIE_KEY));
 //habilitar archivos estaticos
-app.use(express.static("./src/public"));
+// app.use(express.static("./src/public"));
+app.use(express.static("public"));
 
 //express-handlebars
 app.engine("handlebars", engine());

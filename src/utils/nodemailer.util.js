@@ -1,7 +1,7 @@
 import { createTransport } from "nodemailer";
 const { GOOGLE_EMAIL, GOOGLE_PASSWORD } = process.env;
 
-async function verifyAccount(to, verifyCode) {
+async function verifyAccount(to, verifyCode, type) {
   try {
     const pass = GOOGLE_PASSWORD;
     const user = GOOGLE_EMAIL;
@@ -15,7 +15,7 @@ async function verifyAccount(to, verifyCode) {
     await transport.sendMail({
       from: `CODER COMMERCE <${user}>`,
       to: to,
-      subject: "Verify your coder commerce account",
+      subject: type,
       html: `YOUR VERIFY TOKEN IS:${verifyCode}`,
     });
   } catch (error) {

@@ -1,6 +1,7 @@
 import nodemailerUtil from "../utils/nodemailer.util.js";
 import usersService from "../services/user.service.js";
 import { verifyToken } from "../utils/token.util.js";
+import verifyAccount from "../utils/nodemailer.util.js";
 const login = async (req, res) => {
   const { token, user } = req;
   const opts = { maxAge: 60 * 60 * 24 * 7 * 1000, hhtpOnly: true };
@@ -47,33 +48,22 @@ const verify = async(req,res) => {
   }
 }
 const forgotPassword = async (req, res) => {
-  const { email } = req.params;
-
-  const user = await usersService.restore(email);
-  if (!user) return res.json404();
-
-  const resetToken = createToken({ email }, "1h");
-
-  await usersService.updateUser(user._id, { resetToken });
-
-  const resetLink = `http://localhost:8080/reset-password?token=${resetToken}`;
-  await nodemailerUtil(email, "Restaurar Contraseña", `Haz clic en el siguiente enlace para restablecer tu contraseña: ${resetLink}`);
-
-  res.json200(null, "Recovery email sent");
+  const { email } = req.body;
+const user = await usersService.restore(email);
+if(!user){
+  res.json401()
+}else{
+  res.json200(null, "email reset sent")
+}  
 };
+const resetPassword = async (req,res) => {
+  const {email, restoreCode, newPassword} = req.body;
+  const user = await usersService.reset(email, restoreCode, newPassword);
+  if(!user){
+    res.json401()
+    }else{
+      res.json200(null, "password reset")
+      }
+}
 
-const resetPassword = async (req, res) => {
-  const { token, newPassword } = req.body;
-
-    const decoded = verifyToken(token); 
-    const user = await usersService.readOneUser({ _id: decoded.userId });
-
-    if (!user) {
-      return res.json404("User not found");
-    }
-
-    await usersService.updateUser(user._id, { password: newPassword });
-
-    res.json200(null, "Password successfully reset");
-};
 export {register,login,signout,online,google,failure,nodemailer, verify,forgotPassword,resetPassword}

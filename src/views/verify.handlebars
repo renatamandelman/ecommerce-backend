@@ -1,0 +1,11 @@
+<main class="d-flex flex-column align-items-center w-100 flex-grow-1">
+  <h1 class="bg-info-subtle p-2 text-center text-info w-100">VERIFY YOUR ACCOUNT</h1>
+  <form id="verifyForm" class="m-3 d-flex flex-column justify-content-evenly flex-wrap align-items-center" style="width: 380px;">
+    <input class="m-2 p-2 text-center w-100" type="email" name="email" id="email" placeholder="EMAIL" required />
+    <input class="m-2 p-2 text-center w-100" type="text" name="verifyCode" id="verifyCode" placeholder="VERIFICATION CODE" required />
+    <input class="m-2 p-2 text-center btn btn-info w-100" id="verify" type="button" value="VERIFY!" />
+  </form>
+  <p id="message" class="text-center text-danger mt-2"></p>
+</main>
+
+<script src="/js/verify.js"></script>

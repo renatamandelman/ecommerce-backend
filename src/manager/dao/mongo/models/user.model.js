@@ -9,7 +9,8 @@ const schema = new Schema(
     password: { type: String, required: true },
     role: { type: String, default: "USER", enum: ["USER", "ADMIN"] },
     verifyCode: {type:String,requiered:true},
-    verify: {type:Boolean, default:false}
+    verify: {type:Boolean, default:false},
+    restoreCode: {type:String}
   },
   { timestamps: true }
 );

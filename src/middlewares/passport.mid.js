@@ -25,7 +25,7 @@ passport.use(
         const verifyCode = crypto.randomBytes(12).toString("hex");
         req.body.verifyCode = verifyCode;
         const user = await usersManager.create(new UserDto(req.body));
-        await verifyAccount(email,verifyCode)
+        await verifyAccount(email,verifyCode, "Verify your coder commerce account")
         done(null, user);
       } catch (error) {
         done(error);

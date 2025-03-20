@@ -1,6 +1,9 @@
 import { usersManager } from "../manager/dao/dao.js";
 import UserDto from "../manager/dto/users.dto.js";
 import { createToken } from "../utils/token.util.js";
+import crypto from "crypto";
+import { createHash } from "../utils/hash.util.js"
+import verifyAccount from "../utils/nodemailer.util.js";
 class UserService {
   createUser = async (data) => await usersManager.create(new UserDto(data));
   readAllUser = async () => await usersManager.read();
@@ -15,17 +18,27 @@ class UserService {
     }
     return verify;
   }
-  restore = async(email) => {
+  restore = async (email) => {
     const user = await usersManager.readBy({email});
-    if(user) return null;
-    const resetToken = createToken({ email });
-    await usersManager.updateById(user._id, {
-      resetToken,
-      resetTokenExp: Date.now() + 3600000, // 1 hora de validez
-    });
+
+      const restoreCode = crypto.randomBytes(12).toString("hex");
+      await usersService.updateUser(user._id, { restoreCode });
+        await verifyAccount(email, restoreCode, "Reset your coder commerce account");
   
-    return resetToken;
   }
+   reset = async (email, restoreCode, newPassword) => {
+    const user = await usersManager.readBy({ email });
+      const validReset = restoreCode === user.restoreCode;
+    if (!validReset) {
+      return { success: false, error: "Invalid restore code" };
+    }
+    const hashedPassword = createHash(newPassword); 
+    await usersService.updateUser(user._id, { password: hashedPassword, restoreCode: null }); 
+  
+    return hashedPassword;
+  };
+  
+ 
 }
 
 const usersService = new UserService();

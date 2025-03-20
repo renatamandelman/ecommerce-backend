@@ -1,4 +1,5 @@
 document.querySelector("#register").addEventListener("click", async () => {
+  
   console.log("Botón de registro presionado"); 
     try {
       const data = {
@@ -13,13 +14,13 @@ document.querySelector("#register").addEventListener("click", async () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       };
-      let response = await fetch("/api/users", opts);
+      let response = await fetch("/api/auth/register", opts);
       response = await response.json();
       console.log(response);
       if (response.error) {
         alert(response.error);
       } else {
-        location.replace("/");
+        location.replace("/api/views/verify");
       }
     } catch (error) {
       alert(error.error);

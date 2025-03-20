@@ -9,13 +9,13 @@ document.querySelector("#login").addEventListener("click", async () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       };
-      let response = await fetch("/api/users/login", opts);
+      let response = await fetch("/api/auth/login", opts);
       response = await response.json();
       if (response.error) {
         alert(response.error);
       } else {
         localStorage.setItem("user_id", response.response)
-        location.replace("/");
+        location.replace("/api/views/");
       }
     } catch (error) {
       alert(error.error);

@@ -1,0 +1,1 @@
+Entregue un ecommerce trabajado durante los dos cursos de coderhouse de backend. trate de mantener lo realizado en el primer curso, pero adaptandolo a lo pedido en el segundo.
